@@ -42,11 +42,11 @@ impl Args {
                     });
                 }
                 PathArguments::AngleBracketed(args) => args.args.extend(types),
-                _   => panic!(WRAPPER_MUST_BE_PATH)
+                _   => panic!("{}", WRAPPER_MUST_BE_PATH)
             }
 
             Type::Path(wrapper)
-        } else { panic!(WRAPPER_MUST_BE_PATH) }
+        } else { panic!("{}", WRAPPER_MUST_BE_PATH) }
     }
 }
 
@@ -92,7 +92,7 @@ fn innermost_path_arguments(path: &mut Path) -> &mut PathArguments {
                 _   => panic!("Certain strange wrapper types not supported"),
             }
         }
-        _                                   => panic!(WRAPPER_MUST_BE_PATH)
+        _                                   => panic!("{}", WRAPPER_MUST_BE_PATH)
     }
 }
 
