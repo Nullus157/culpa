@@ -50,7 +50,7 @@ The attribute can be used to make a function that returns an Option using the
 #[throws(as Option)]
 fn foo(x: bool) -> i32 {
     if x {
-        return 0;
+        0
     } else {
         throw!();
     }
