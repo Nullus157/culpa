@@ -1,6 +1,6 @@
 use culpa::throws;
 
-pub type Error = ();
+pub type Error = isize;
 
 #[throws]
 pub fn inner_function() {

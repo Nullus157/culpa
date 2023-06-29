@@ -1,6 +1,6 @@
 use culpa::{throws, throw};
 
-type Error = ();
+type Error = isize;
 
 #[throws(_)]
 pub fn unit_fn() { }
