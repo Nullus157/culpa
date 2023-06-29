@@ -124,3 +124,9 @@ pub fn let_else(a: Option<u8>) -> u8 {
     };
     a
 }
+
+#[throws(i32)]
+#[deny(unreachable_code)]
+pub fn unreachable() {
+    todo!()
+}
