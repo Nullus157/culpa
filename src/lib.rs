@@ -175,3 +175,34 @@ pub mod __internal {
         }
     }
 }
+
+/// Test that function is marked as dead code, because compile_fail is such a blunt instrument
+/// these tests should be kept in sync in pairs other than the deny, to ensure there's not another
+/// reason to fail compilation
+///
+/// ```
+/// #[fehler::throws(())]
+/// fn f() {}
+/// ```
+/// ```compile_fail
+/// #[deny(dead_code)]
+/// #[fehler::throws(())]
+/// fn f() {}
+/// ```
+///
+/// ```
+/// pub struct Foo;
+/// impl Foo {
+///   #[fehler::throws(())]
+///   fn f() {}
+/// }
+/// ```
+/// ```compile_fail
+/// pub struct Foo;
+/// impl Foo {
+///   #[deny(dead_code)]
+///   #[fehler::throws(())]
+///   fn f() {}
+/// }
+/// ```
+const _DEAD_CODE: () = ();

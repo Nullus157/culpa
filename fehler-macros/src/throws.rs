@@ -119,12 +119,14 @@ impl Fold for Throws {
 }
 
 fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
-    syn::parse2(quote::quote! {{
+    let mut block: syn::Block = syn::parse2(quote::quote! {{
         let __ret = #inner;
 
         #[allow(unreachable_code)]
         <#ty as ::fehler::__internal::_Succeed>::from_ok(__ret)
-    }}).unwrap()
+    }}).unwrap();
+    block.brace_token = inner.brace_token;
+    block
 }
 
 fn ok(ty: &syn::Type, expr: &syn::Expr) -> syn::Expr {
