@@ -101,3 +101,18 @@ mod foo {
         throw!(0);
     }
 }
+
+mod foo_trait_obj {
+    use fehler::throws;
+    trait FooTrait {}
+
+    struct FooStruct;
+
+    struct FooError;
+    impl FooTrait for FooStruct {}
+
+    #[throws(FooError)]
+    fn foo() -> Box<dyn FooTrait> {
+        Box::new(FooStruct)
+    }
+}
