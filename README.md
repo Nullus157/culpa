@@ -5,6 +5,10 @@ Functions marked with the `throws` attribute return `Result`, but the "Ok" path
 is used by default and you don't need to wrap ok return values in `Ok`. To throw
 errors, use `?` or the `throws` macro.
 
+> A fork of [Der Fehler](https://github.com/withoutboats/fehler) updating
+dependencies and fixing issues while (by my understanding) boats is unable to
+contribute to open source.
+
 # The `#[throws]` attribute
 
 The throws attribute modifies a function or method to make it return a
