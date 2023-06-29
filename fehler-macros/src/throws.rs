@@ -13,11 +13,16 @@ use crate::Args;
 pub struct Throws {
     args: Args,
     outer_fn: bool,
+    return_type: Box<syn::Type>,
 }
 
 impl Throws {
     pub fn new(args: Args) -> Throws {
-        Throws { args, outer_fn: true }
+        Throws {
+            args,
+            outer_fn: true,
+            return_type: Box::new(syn::parse_quote!(())),
+        }
     }
 
     pub fn fold(&mut self, input: TokenStream) -> TokenStream {
@@ -48,7 +53,7 @@ impl Fold for Throws {
         self.outer_fn = false;
 
         let inner = self.fold_block(*i.block);
-        let block = Box::new(make_fn_block(&inner));
+        let block = Box::new(make_fn_block(&self.return_type, &inner));
 
         syn::ItemFn { sig, block, ..i }
     }
@@ -64,7 +69,7 @@ impl Fold for Throws {
         self.outer_fn = false;
 
         let inner = self.fold_block(i.block);
-        let block = make_fn_block(&inner);
+        let block = make_fn_block(&self.return_type, &inner);
 
         syn::ImplItemMethod { sig, block, ..i }
     }
@@ -81,7 +86,7 @@ impl Fold for Throws {
 
         let default = i.default.take().map(|block| {
             let inner = self.fold_block(block);
-            make_fn_block(&inner)
+            make_fn_block(&self.return_type, &inner)
         });
 
 
@@ -98,31 +103,34 @@ impl Fold for Throws {
 
     fn fold_return_type(&mut self, i: syn::ReturnType) -> syn::ReturnType {
         if !self.outer_fn { return i; }
-        self.args.ret(i)
+        let return_type = self.args.ret(i);
+        let syn::ReturnType::Type(_, ty) = &return_type else { unreachable!() };
+        self.return_type = ty.clone();
+        return_type
     }
 
     fn fold_expr_return(&mut self, i: syn::ExprReturn) -> syn::ExprReturn {
         let ok = match &i.expr {
-            Some(expr)  => ok(expr),
-            None        => ok_unit(),
+            Some(expr)  => ok(&self.return_type, expr),
+            None        => ok_unit(&self.return_type),
         };
         syn::ExprReturn { expr: Some(Box::new(ok)), ..i }
     }
 }
 
-fn make_fn_block(inner: &syn::Block) -> syn::Block {
+fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
     syn::parse2(quote::quote! {{
         let __ret = #inner;
 
         #[allow(unreachable_code)]
-        <_ as ::fehler::__internal::_Succeed>::from_ok(__ret)
+        <#ty as ::fehler::__internal::_Succeed>::from_ok(__ret)
     }}).unwrap()
 }
 
-fn ok(expr: &syn::Expr) -> syn::Expr {
-    syn::parse2(quote::quote!(<_ as ::fehler::__internal::_Succeed>::from_ok(#expr))).unwrap()
+fn ok(ty: &syn::Type, expr: &syn::Expr) -> syn::Expr {
+    syn::parse2(quote::quote!(<#ty as ::fehler::__internal::_Succeed>::from_ok(#expr))).unwrap()
 }
 
-fn ok_unit() -> syn::Expr {
-    syn::parse2(quote::quote!(<_ as ::fehler::__internal::_Succeed>::from_ok(()))).unwrap()
+fn ok_unit(ty: &syn::Type) -> syn::Expr {
+    syn::parse2(quote::quote!(<#ty as ::fehler::__internal::_Succeed>::from_ok(()))).unwrap()
 }
