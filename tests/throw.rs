@@ -1,4 +1,4 @@
-use fehler::throw;
+use culpa::throw;
 
 #[test]
 fn throw_works() {

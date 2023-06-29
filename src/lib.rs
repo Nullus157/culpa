@@ -13,7 +13,7 @@
 /// ```should_panic
 /// use std::io::{self, Read};
 ///
-/// use fehler::{throw, throws};
+/// use culpa::{throw, throws};
 ///
 /// #[throws(io::Error)]
 /// fn main() {
@@ -40,7 +40,7 @@
 /// ## Example
 ///
 /// ```should_panic
-/// use fehler::throws;
+/// use culpa::throws;
 ///
 /// // Set the default error type for this module:
 /// type Error = std::io::Error;
@@ -63,7 +63,7 @@
 /// ## Example
 ///
 /// ```
-/// use fehler::{throw, throws};
+/// use culpa::{throw, throws};
 ///
 /// #[throws(as Option)]
 /// fn example<T: Eq + Ord>(slice: &[T], needle: &T) -> usize {
@@ -87,7 +87,7 @@
 /// support `throws` syntax on functions that return `Poll` (so you can't use this syntax when
 /// implementing a Future by hand, for example). I hope to come up with a way to support Poll in
 /// the future.
-pub use fehler_macros::throws;
+pub use culpa_macros::throws;
 
 /// Throw an error.
 ///
@@ -181,19 +181,19 @@ pub mod __internal {
 /// reason to fail compilation
 ///
 /// ```
-/// #[fehler::throws(())]
+/// #[culpa::throws(())]
 /// fn f() {}
 /// ```
 /// ```compile_fail
 /// #[deny(dead_code)]
-/// #[fehler::throws(())]
+/// #[culpa::throws(())]
 /// fn f() {}
 /// ```
 ///
 /// ```
 /// pub struct Foo;
 /// impl Foo {
-///   #[fehler::throws(())]
+///   #[culpa::throws(())]
 ///   fn f() {}
 /// }
 /// ```
@@ -201,7 +201,7 @@ pub mod __internal {
 /// pub struct Foo;
 /// impl Foo {
 ///   #[deny(dead_code)]
-///   #[fehler::throws(())]
+///   #[culpa::throws(())]
 ///   fn f() {}
 /// }
 /// ```

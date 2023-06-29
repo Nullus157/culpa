@@ -1,6 +1,6 @@
 #![no_std]
 
-use fehler::{throw, throws};
+use culpa::{throw, throws};
 
 #[throws(i32)]
 fn no_std_fn() {

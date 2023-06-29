@@ -1,17 +1,15 @@
 [package]
-name = "fehler"
+name = "culpa"
 version = "1.0.0"
 edition = "2018"
-authors = ["Without Boats <boats@mozilla.com>"]
 license = "MIT OR Apache-2.0"
 
 description = "A library for error-handling syntax in Rust"
-repository = "https://github.com/withoutboats/fehler"
-documentation = "https://docs.rs/fehler"
+repository = "https://github.com/Nullus157/culpa"
 keywords = ["error-handling", "exceptions"]
 
-[dependencies.fehler-macros]
-path = "./fehler-macros"
+[dependencies.culpa-macros]
+path = "macros"
 version = "1.0.0"
 
 [workspace]

@@ -1,12 +1,11 @@
 [package]
-name = "fehler-macros"
+name = "culpa-macros"
 version = "1.0.0"
 edition = "2018"
-authors = ["Without Boats <boats@mozilla.com>"]
 license = "MIT OR Apache-2.0"
 
-description = "Macros des Fehlers"
-repository = "https://github.com/withoutboats/fehler"
+description = "Internal implementation details of `culpa`"
+repository = "https://github.com/Nullus157/culpa"
 
 [lib]
 proc-macro = true

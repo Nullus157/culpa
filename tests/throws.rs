@@ -1,4 +1,4 @@
-use fehler::{throws, throw};
+use culpa::{throws, throw};
 
 type Error = ();
 
@@ -92,7 +92,7 @@ pub fn throws_as_result_alias() -> i32 {
 pub fn ommitted_error() { }
 
 pub mod foo {
-    use fehler::{throws, throw};
+    use culpa::{throws, throw};
 
     pub type Error = i32;
 
@@ -103,7 +103,7 @@ pub mod foo {
 }
 
 pub mod foo_trait_obj {
-    use fehler::throws;
+    use culpa::throws;
     pub trait FooTrait {}
 
     struct FooStruct;

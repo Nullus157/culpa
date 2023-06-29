@@ -1,4 +1,4 @@
-use fehler::throws;
+use culpa::throws;
 
 pub type Error = ();
 

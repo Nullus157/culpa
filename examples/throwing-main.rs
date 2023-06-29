@@ -1,4 +1,4 @@
-use fehler::{throws, throw};
+use culpa::{throws, throw};
 
 #[derive(Debug)]
 struct Error;

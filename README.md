@@ -1,15 +1,11 @@
-# Der Fehler
+[![version-badge][]][version] [![license-badge][]][license] [![rust-version-badge][]][rust-version]
 
-[![Documentation](https://docs.rs/fehler/badge.svg)](https://docs.rs/fehler/*/fehler/)
+Adding support for "throwing functions" to Rust through procedural macros.
+Functions marked with the `throws` attribute return `Result`, but the "Ok" path
+is used by default and you don't need to wrap ok return values in `Ok`. To throw
+errors, use `?` or the `throws` macro.
 
-Der Fehler is a library to add support for "throwing functions" to Rust through
-procedural macros. Functions marked with the `throws` attribute return
-`Result`, but the "Ok" path is used by default and you don't need to wrap ok
-return values in `Ok`. To throw errors, use `?` or the `throws` macro.
-
-Der Fehler provides these items:
-
-### The `#[throws]` attribute
+# The `#[throws]` attribute
 
 The throws attribute modifies a function or method to make it return a
 `Result`. It takes an optional typename as an argument to the attribute which
@@ -57,7 +53,7 @@ fn foo(x: bool) -> i32 {
 }
 ```
 
-### The `throw!` macro
+# The `throw!` macro
 
 `throw!` is a macro which is equivalent to the `Err($e)?` pattern. It takes an
 error type and "throws" it.
@@ -66,14 +62,12 @@ One important aspect of the `throw!` macro is that it allows you to return
 errors inside of functions marked with `throws`. You cannot just `return`
 errors from these functions, you need to use this macro.
 
-# TODO
+# Rust Version Policy
 
-* Make throws work on closures and async blocks (attributes are not allowed on
-  expressions on stable)
-* Make throws work on Try types other than Result and Option (TRy is not on
-  stable).
+This crate only supports the current stable version of Rust, patch releases may
+use new features at any time.
 
-## License
+# License
 
 Licensed under either of
 
@@ -82,8 +76,16 @@ Licensed under either of
 
 at your option.
 
-#### Contribution
+## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
 dual licensed as above, without any additional terms or conditions.
+
+[version-badge]: https://img.shields.io/crates/v/culpa.svg?style=flat-square
+[version]: https://crates.io/crates/culpa
+[license-badge]: https://img.shields.io/crates/l/culpa.svg?style=flat-square
+[license]: #license
+[rust-version-badge]: https://img.shields.io/badge/rust-latest%20stable-blueviolet.svg?style=flat-square
+[rust-version]: #rust-version-policy
+

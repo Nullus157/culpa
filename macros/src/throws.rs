@@ -123,16 +123,16 @@ fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
         let __ret = #inner;
 
         #[allow(unreachable_code)]
-        <#ty as ::fehler::__internal::_Succeed>::from_ok(__ret)
+        <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
     }}).unwrap();
     block.brace_token = inner.brace_token;
     block
 }
 
 fn ok(ty: &syn::Type, expr: &syn::Expr) -> syn::Expr {
-    syn::parse2(quote::quote!(<#ty as ::fehler::__internal::_Succeed>::from_ok(#expr))).unwrap()
+    syn::parse2(quote::quote!(<#ty as ::culpa::__internal::_Succeed>::from_ok(#expr))).unwrap()
 }
 
 fn ok_unit(ty: &syn::Type) -> syn::Expr {
-    syn::parse2(quote::quote!(<#ty as ::fehler::__internal::_Succeed>::from_ok(()))).unwrap()
+    syn::parse2(quote::quote!(<#ty as ::culpa::__internal::_Succeed>::from_ok(()))).unwrap()
 }
