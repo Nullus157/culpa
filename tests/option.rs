@@ -1,8 +1,10 @@
-use culpa::{throws, throw};
+use culpa::{throw, throws};
 
 #[throws(as Option)]
 fn foo(x: bool) -> i32 {
-    if x { throw!(); }
+    if x {
+        throw!();
+    }
     0
 }
 

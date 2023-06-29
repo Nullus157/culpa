@@ -2,7 +2,9 @@ use culpa::throw;
 
 #[test]
 fn throw_works() {
-    fn foo() -> Result<(), i32> { throw!(0) }
+    fn foo() -> Result<(), i32> {
+        throw!(0)
+    }
     assert_eq!(foo(), Err(0));
 }
 

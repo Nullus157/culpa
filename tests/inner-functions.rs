@@ -4,14 +4,12 @@ pub type Error = isize;
 
 #[throws]
 pub fn inner_function() {
-    fn foo() {
-    }
+    fn foo() {}
     foo();
 }
 
 #[throws]
-pub fn fn_parameters(_: fn()) {
-}
+pub fn fn_parameters(_: fn()) {}
 
 #[throws]
 pub fn fn_type_alias() {
@@ -26,5 +24,5 @@ pub fn type_ascription() {
 
 #[throws(std::io::Error)]
 pub fn dyn_fn_once() {
-    let mut _unused: Box<dyn FnOnce()> = Box::new(||());
+    let mut _unused: Box<dyn FnOnce()> = Box::new(|| ());
 }

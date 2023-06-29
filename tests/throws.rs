@@ -1,9 +1,9 @@
-use culpa::{throws, throw};
+use culpa::{throw, throws};
 
 type Error = isize;
 
 #[throws(_)]
-pub fn unit_fn() { }
+pub fn unit_fn() {}
 
 #[throws(_)]
 pub fn returns_fn() -> i32 {
@@ -12,11 +12,13 @@ pub fn returns_fn() -> i32 {
 
 #[throws(_)]
 pub fn returns_unit_fn() {
-    if true { return; }
+    if true {
+        return;
+    }
 }
 
 #[throws(_)]
-pub fn explicit_unit() -> () { }
+pub fn explicit_unit() -> () {}
 
 #[throws(_)]
 pub fn tail_returns_value() -> i32 {
@@ -24,7 +26,7 @@ pub fn tail_returns_value() -> i32 {
 }
 
 #[throws(_)]
-pub async fn async_fn() { }
+pub async fn async_fn() {}
 
 #[throws(_)]
 pub async fn async_fn_with_ret() -> i32 {
@@ -33,7 +35,9 @@ pub async fn async_fn_with_ret() -> i32 {
 
 #[throws(i32)]
 pub fn throws_error() {
-    if true { throw!(0); }
+    if true {
+        throw!(0);
+    }
 }
 
 #[throws(i32)]
@@ -47,22 +51,28 @@ pub fn throws_and_has_return_type() -> &'static str {
 }
 
 #[throws(E)]
-pub fn throws_generics<E>() { }
+pub fn throws_generics<E>() {}
 
 pub struct Foo;
 
 impl Foo {
     #[throws(_)]
-    pub fn static_method() { }
+    pub fn static_method() {}
 
     #[throws(_)]
-    pub fn bar(&self) -> i32 { if true { return 1; } 0 }
+    pub fn bar(&self) -> i32 {
+        if true {
+            return 1;
+        }
+        0
+    }
 }
-
 
 #[throws(_)]
 pub fn has_inner_fn() {
-    fn inner_fn() -> i32 { 0 }
+    fn inner_fn() -> i32 {
+        0
+    }
     let _: i32 = inner_fn();
 }
 
@@ -89,10 +99,10 @@ pub fn throws_as_result_alias() -> i32 {
 }
 
 #[throws]
-pub fn ommitted_error() { }
+pub fn ommitted_error() {}
 
 pub mod foo {
-    use culpa::{throws, throw};
+    use culpa::{throw, throws};
 
     pub type Error = i32;
 

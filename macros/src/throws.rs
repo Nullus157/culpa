@@ -43,7 +43,9 @@ impl Throws {
 
 impl Fold for Throws {
     fn fold_item_fn(&mut self, i: syn::ItemFn) -> syn::ItemFn {
-        if !self.outer_fn { return i; }
+        if !self.outer_fn {
+            return i;
+        }
 
         let sig = syn::Signature {
             output: self.fold_return_type(i.sig.output),
@@ -59,7 +61,9 @@ impl Fold for Throws {
     }
 
     fn fold_impl_item_fn(&mut self, i: syn::ImplItemFn) -> syn::ImplItemFn {
-        if !self.outer_fn { return i; }
+        if !self.outer_fn {
+            return i;
+        }
 
         let sig = syn::Signature {
             output: self.fold_return_type(i.sig.output),
@@ -75,7 +79,9 @@ impl Fold for Throws {
     }
 
     fn fold_trait_item_fn(&mut self, mut i: syn::TraitItemFn) -> syn::TraitItemFn {
-        if !self.outer_fn { return i; }
+        if !self.outer_fn {
+            return i;
+        }
 
         let sig = syn::Signature {
             output: self.fold_return_type(i.sig.output),
@@ -89,7 +95,6 @@ impl Fold for Throws {
             make_fn_block(&self.return_type, &inner)
         });
 
-
         syn::TraitItemFn { sig, default, ..i }
     }
 
@@ -102,7 +107,9 @@ impl Fold for Throws {
     }
 
     fn fold_return_type(&mut self, i: syn::ReturnType) -> syn::ReturnType {
-        if !self.outer_fn { return i; }
+        if !self.outer_fn {
+            return i;
+        }
         let return_type = self.args.ret(i);
         let syn::ReturnType::Type(_, ty) = &return_type else { unreachable!() };
         self.return_type = ty.clone();
@@ -111,10 +118,13 @@ impl Fold for Throws {
 
     fn fold_expr_return(&mut self, i: syn::ExprReturn) -> syn::ExprReturn {
         let ok = match &i.expr {
-            Some(expr)  => ok(&self.return_type, expr),
-            None        => ok_unit(&self.return_type),
+            Some(expr) => ok(&self.return_type, expr),
+            None => ok_unit(&self.return_type),
         };
-        syn::ExprReturn { expr: Some(Box::new(ok)), ..i }
+        syn::ExprReturn {
+            expr: Some(Box::new(ok)),
+            ..i
+        }
     }
 }
 
@@ -124,7 +134,8 @@ fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
 
         #[allow(unreachable_code)]
         <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
-    }}).unwrap();
+    }})
+    .unwrap();
     block.brace_token = inner.brace_token;
     block
 }

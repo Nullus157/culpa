@@ -94,8 +94,12 @@ pub use culpa_macros::throws;
 /// This macro is equivalent to `Err($err)?`.
 #[macro_export]
 macro_rules! throw {
-    ($err:expr)   => (return <_ as $crate::__internal::_Throw>::from_error((::core::convert::From::from($err))));
-    ()            => (return <_ as ::core::default::Default>::default());
+    ($err:expr) => {
+        return <_ as $crate::__internal::_Throw>::from_error((::core::convert::From::from($err)))
+    };
+    () => {
+        return <_ as ::core::default::Default>::default()
+    };
 }
 
 #[doc(hidden)]
@@ -133,7 +137,7 @@ pub mod __internal {
             fn from_ok(ok: Self::Ok) -> Self {
                 match ok {
                     Poll::Ready(ok) => Poll::Ready(Ok(ok)),
-                    Poll::Pending   => Poll::Pending,
+                    Poll::Pending => Poll::Pending,
                 }
             }
         }
@@ -151,9 +155,9 @@ pub mod __internal {
 
             fn from_ok(ok: Self::Ok) -> Self {
                 match ok {
-                    Poll::Ready(Some(ok))   => Poll::Ready(Some(Ok(ok))),
-                    Poll::Ready(None)       => Poll::Ready(None),
-                    Poll::Pending           => Poll::Pending,
+                    Poll::Ready(Some(ok)) => Poll::Ready(Some(Ok(ok))),
+                    Poll::Ready(None) => Poll::Ready(None),
+                    Poll::Pending => Poll::Pending,
                 }
             }
         }
