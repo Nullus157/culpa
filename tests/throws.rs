@@ -116,3 +116,11 @@ pub mod foo_trait_obj {
         Box::new(FooStruct)
     }
 }
+
+#[throws]
+pub fn let_else(a: Option<u8>) -> u8 {
+    let Some(a) = a else {
+        return 0;
+    };
+    a
+}
