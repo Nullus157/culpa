@@ -130,3 +130,8 @@ pub fn let_else(a: Option<u8>) -> u8 {
 pub fn unreachable() {
     todo!()
 }
+
+trait Example {
+    #[throws]
+    fn foo() -> i32;
+}
