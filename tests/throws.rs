@@ -91,28 +91,28 @@ pub fn throws_as_result_alias() -> i32 {
 #[throws]
 pub fn ommitted_error() { }
 
-mod foo {
+pub mod foo {
     use fehler::*;
 
-    type Error = i32;
+    pub type Error = i32;
 
     #[throws]
-    fn throws_integer() {
+    pub fn throws_integer() {
         throw!(0);
     }
 }
 
-mod foo_trait_obj {
+pub mod foo_trait_obj {
     use fehler::throws;
-    trait FooTrait {}
+    pub trait FooTrait {}
 
     struct FooStruct;
 
-    struct FooError;
+    pub struct FooError;
     impl FooTrait for FooStruct {}
 
     #[throws(FooError)]
-    fn foo() -> Box<dyn FooTrait> {
+    pub fn foo() -> Box<dyn FooTrait> {
         Box::new(FooStruct)
     }
 }

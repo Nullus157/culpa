@@ -1,23 +1,25 @@
 use fehler::throws;
 
-type Error = ();
+pub type Error = ();
 
 #[throws]
-fn inner_function() {
+pub fn inner_function() {
     fn foo() {
     }
+    foo();
 }
 
 #[throws]
-fn fn_parameters(_: fn()) {
+pub fn fn_parameters(_: fn()) {
 }
 
 #[throws]
-fn fn_type_alias() {
+pub fn fn_type_alias() {
+    #[allow(dead_code)]
     type X = fn();
 }
 
 #[throws]
-fn type_ascription() {
+pub fn type_ascription() {
     let _: fn() = panic!();
 }
