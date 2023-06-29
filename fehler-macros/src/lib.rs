@@ -3,7 +3,7 @@ extern crate proc_macro;
 mod args;
 mod throws;
 
-use proc_macro::*;
+use proc_macro::TokenStream;
 
 use args::Args;
 use throws::Throws;

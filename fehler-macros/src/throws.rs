@@ -5,7 +5,7 @@
 // - It ok wraps return expressions and inserts terminal Ok(())s.
 // - It delegates return type rewriting to the Args type.
 
-use proc_macro::*;
+use proc_macro::TokenStream;
 use syn::fold::Fold;
 
 use crate::Args;

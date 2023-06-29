@@ -1,4 +1,4 @@
-use fehler::*;
+use fehler::{throws, throw};
 
 type Error = ();
 
@@ -92,7 +92,7 @@ pub fn throws_as_result_alias() -> i32 {
 pub fn ommitted_error() { }
 
 pub mod foo {
-    use fehler::*;
+    use fehler::{throws, throw};
 
     pub type Error = i32;
 

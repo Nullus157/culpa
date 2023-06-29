@@ -1,4 +1,4 @@
-use fehler::*;
+use fehler::{throws, throw};
 
 #[throws(as Option)]
 fn foo(x: bool) -> i32 {

@@ -5,7 +5,7 @@
 
 use proc_macro2::Span;
 use syn::{GenericArgument, Path, PathArguments, ReturnType, Token, Type};
-use syn::parse::*;
+use syn::parse::{Parse, ParseStream, Result};
 
 const WRAPPER_MUST_BE_PATH: &str = "Wrapper type must be a normal path type";
 
