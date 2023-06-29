@@ -29,12 +29,12 @@ impl Throws {
         if let Ok(item_fn) = syn::parse(input.clone()) {
             let item_fn = self.fold_item_fn(item_fn);
             quote::quote!(#item_fn).into()
-        } else if let Ok(method) = syn::parse(input.clone()) {
-            let method = self.fold_impl_item_method(method);
-            quote::quote!(#method).into()
-        } else if let Ok(method) = syn::parse(input) {
-            let method = self.fold_trait_item_method(method);
-            quote::quote!(#method).into()
+        } else if let Ok(impl_item_fn) = syn::parse(input.clone()) {
+            let impl_item_fn = self.fold_impl_item_fn(impl_item_fn);
+            quote::quote!(#impl_item_fn).into()
+        } else if let Ok(trait_item_fn) = syn::parse(input) {
+            let trait_item_fn = self.fold_trait_item_fn(trait_item_fn);
+            quote::quote!(#trait_item_fn).into()
         } else {
             panic!("#[throws] attribute can only be applied to functions and methods")
         }
@@ -58,7 +58,7 @@ impl Fold for Throws {
         syn::ItemFn { sig, block, ..i }
     }
 
-    fn fold_impl_item_method(&mut self, i: syn::ImplItemMethod) -> syn::ImplItemMethod {
+    fn fold_impl_item_fn(&mut self, i: syn::ImplItemFn) -> syn::ImplItemFn {
         if !self.outer_fn { return i; }
 
         let sig = syn::Signature {
@@ -71,10 +71,10 @@ impl Fold for Throws {
         let inner = self.fold_block(i.block);
         let block = make_fn_block(&self.return_type, &inner);
 
-        syn::ImplItemMethod { sig, block, ..i }
+        syn::ImplItemFn { sig, block, ..i }
     }
 
-    fn fold_trait_item_method(&mut self, mut i: syn::TraitItemMethod) -> syn::TraitItemMethod {
+    fn fold_trait_item_fn(&mut self, mut i: syn::TraitItemFn) -> syn::TraitItemFn {
         if !self.outer_fn { return i; }
 
         let sig = syn::Signature {
@@ -90,7 +90,7 @@ impl Fold for Throws {
         });
 
 
-        syn::TraitItemMethod { sig, default, ..i }
+        syn::TraitItemFn { sig, default, ..i }
     }
 
     fn fold_expr_closure(&mut self, i: syn::ExprClosure) -> syn::ExprClosure {

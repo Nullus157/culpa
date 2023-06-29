@@ -12,9 +12,9 @@ repository = "https://github.com/withoutboats/fehler"
 proc-macro = true
 
 [dependencies]
-quote = "1.0.0"
-proc-macro2 = "1.0.0"
+quote = "1.0.29"
+proc-macro2 = "1.0.63"
 
 [dependencies.syn]
-features = ["default", "fold", "full", "parsing"]
-version = "1.0.0"
+features = ["fold", "full", "parsing"]
+version = "2.0.22"
