@@ -32,7 +32,7 @@ impl Throws {
         } else if let Ok(method) = syn::parse(input.clone()) {
             let method = self.fold_impl_item_method(method);
             quote::quote!(#method).into()
-        } else if let Ok(method) = syn::parse(input.clone()) {
+        } else if let Ok(method) = syn::parse(input) {
             let method = self.fold_trait_item_method(method);
             quote::quote!(#method).into()
         } else {
