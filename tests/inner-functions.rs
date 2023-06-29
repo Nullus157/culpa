@@ -23,3 +23,8 @@ pub fn fn_type_alias() {
 pub fn type_ascription() {
     let _: fn() = panic!();
 }
+
+#[throws(std::io::Error)]
+pub fn dyn_fn_once() {
+    let mut _unused: Box<dyn FnOnce()> = Box::new(||());
+}
