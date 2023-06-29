@@ -13,7 +13,7 @@ use crate::Args;
 pub struct Throws {
     args: Args,
     outer_fn: bool,
-    return_type: Box<syn::Type>,
+    return_type: syn::Type,
 }
 
 impl Throws {
@@ -21,7 +21,7 @@ impl Throws {
         Throws {
             args,
             outer_fn: true,
-            return_type: Box::new(syn::parse_quote!(())),
+            return_type: syn::parse_quote!(()),
         }
     }
 
@@ -112,7 +112,16 @@ impl Fold for Throws {
         }
         let return_type = self.args.ret(i);
         let syn::ReturnType::Type(_, ty) = &return_type else { unreachable!() };
-        self.return_type = ty.clone();
+        struct ImplTraitToInfer;
+        impl Fold for ImplTraitToInfer {
+            fn fold_type(&mut self, i: syn::Type) -> syn::Type {
+                match i {
+                    syn::Type::ImplTrait(_) => syn::Type::Infer(syn::parse_quote!(_)),
+                    i => syn::fold::fold_type(self, i),
+                }
+            }
+        }
+        self.return_type = ImplTraitToInfer.fold_type(ty.as_ref().clone());
         return_type
     }
 

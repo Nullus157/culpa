@@ -1,6 +1,6 @@
 [package]
 name = "culpa"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2018"
 license = "MIT OR Apache-2.0"
 
@@ -10,6 +10,6 @@ keywords = ["error-handling", "exceptions"]
 
 [dependencies.culpa-macros]
 path = "macros"
-version = "=1.0.0"
+version = "=1.0.1"
 
 [workspace]

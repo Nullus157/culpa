@@ -135,6 +135,9 @@ pub fn let_else(a: Option<u8>) -> u8 {
     a
 }
 
+#[throws]
+pub fn impl_trait() -> impl std::fmt::Debug {}
+
 #[throws(i32)]
 #[deny(unreachable_code)]
 pub fn unreachable() {
