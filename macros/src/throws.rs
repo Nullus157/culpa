@@ -111,7 +111,9 @@ impl Fold for Throws {
             return i;
         }
         let return_type = self.args.ret(i);
-        let syn::ReturnType::Type(_, ty) = &return_type else { unreachable!() };
+        let syn::ReturnType::Type(_, ty) = &return_type else {
+            unreachable!()
+        };
         struct ImplTraitToInfer;
         impl Fold for ImplTraitToInfer {
             fn fold_type(&mut self, i: syn::Type) -> syn::Type {
