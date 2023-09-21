@@ -10,13 +10,13 @@
 /// wish to raise your own error, you can return it with the `throw!` macro.
 ///
 /// ## Example
-/// ```should_panic
+/// ```
 /// use std::io::{self, Read};
 ///
 /// use culpa::{throw, throws};
 ///
 /// #[throws(io::Error)]
-/// fn main() {
+/// fn check() {
 ///     let mut file = std::fs::File::open("The_House_of_the_Spirits.txt")?;
 ///     let mut text = String::new();
 ///     file.read_to_string(&mut text)?;
@@ -39,14 +39,14 @@
 ///
 /// ## Example
 ///
-/// ```should_panic
+/// ```
 /// use culpa::throws;
 ///
 /// // Set the default error type for this module:
 /// type Error = std::io::Error;
 ///
 /// #[throws]
-/// fn main() {
+/// fn print() {
 ///    let file = std::fs::read_to_string("my_file.txt")?;
 ///    println!("{}", file);
 /// }
