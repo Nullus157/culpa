@@ -111,7 +111,9 @@ impl Fold for Throws {
             return i;
         }
         let return_type = self.args.ret(i);
-        let syn::ReturnType::Type(_, ty) = &return_type else { unreachable!() };
+        let syn::ReturnType::Type(_, ty) = &return_type else {
+            unreachable!()
+        };
         struct ImplTraitToInfer;
         impl Fold for ImplTraitToInfer {
             fn fold_type(&mut self, i: syn::Type) -> syn::Type {
@@ -139,10 +141,13 @@ impl Fold for Throws {
 
 fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
     let mut block: syn::Block = syn::parse2(quote::quote! {{
-        let __ret = #inner;
+        #[allow(clippy::diverging_sub_expression)]
+        {
+            let __ret = { #inner };
 
-        #[allow(unreachable_code)]
-        <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
+            #[allow(unreachable_code)]
+            <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
+        }
     }})
     .unwrap();
     block.brace_token = inner.brace_token;
