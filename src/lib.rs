@@ -94,6 +94,12 @@
 /// See the main crate docs for more details.
 pub use culpa_macros::throws;
 
+#[doc(inline)]
+/// Annotates a function that implicitly wraps a try block.
+///
+/// See the main crate docs for more details.
+pub use culpa_macros::try_;
+
 /// Throw an error.
 ///
 /// This macro is equivalent to `Err($err)?`.
@@ -215,3 +221,9 @@ pub mod __internal {
 /// }
 /// ```
 const _DEAD_CODE: () = ();
+
+/// ```compile_fail
+/// #[culpa::try_(())]
+/// fn f() {}
+/// ```
+const _NO_TRY_ARGS: () = ();
