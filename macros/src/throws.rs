@@ -141,10 +141,13 @@ impl Fold for Throws {
 
 fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
     let mut block: syn::Block = syn::parse2(quote::quote! {{
-        let __ret = #inner;
+        #[allow(clippy::diverging_sub_expression)]
+        {
+            let __ret = { #inner };
 
-        #[allow(unreachable_code)]
-        <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
+            #[allow(unreachable_code)]
+            <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
+        }
     }})
     .unwrap();
     block.brace_token = inner.brace_token;
