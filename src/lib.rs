@@ -113,6 +113,31 @@
 //! support `throws` syntax on functions that return `Poll` (so you can't use this syntax when
 //! implementing a `Future` by hand, for example). I hope to come up with a way to support `Poll`
 //! in the future.
+//!
+//! # Annotating Expressions
+//!
+//! Attributes on expressions are still unstable, so there is a separate non-attribute macro
+//! [`throws_expr!`] available to wrap closures or async blocks.
+//!
+//! ## Example
+//!
+//! ```
+//! use std::io::{self, Read, Error};
+//!
+//! use culpa::{throw, throws_expr};
+//!
+//! let closure = throws_expr!(|| {
+//!     let mut file = std::fs::File::open("The_House_of_the_Spirits.txt")?;
+//!     let mut text = String::new();
+//!     file.read_to_string(&mut text)?;
+//!
+//!     if !text.starts_with("Barrabas came to us by sea, the child Clara wrote") {
+//!         throw!(Error::from_raw_os_error(22));
+//!     }
+//!
+//!     println!("Okay!");
+//! });
+//! ```
 
 #[doc(inline)]
 /// Annotates a function that "throws" a Result.
@@ -125,6 +150,14 @@ pub use culpa_macros::throws;
 ///
 /// See the main crate docs for more details.
 pub use culpa_macros::try_fn;
+
+#[doc(inline)]
+/// Annotates an expression (closure or async block) that "throws" a Result.
+///
+/// Workaround for attributes on expressions being unstable.
+///
+/// See the main crate docs for more details.
+pub use culpa_macros::throws_expr;
 
 /// Throw an error.
 ///

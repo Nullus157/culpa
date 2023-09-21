@@ -32,11 +32,17 @@ impl Throws {
         } else if let Ok(impl_item_fn) = syn::parse(input.clone()) {
             let impl_item_fn = self.fold_impl_item_fn(impl_item_fn);
             quote::quote!(#impl_item_fn).into()
-        } else if let Ok(trait_item_fn) = syn::parse(input) {
+        } else if let Ok(trait_item_fn) = syn::parse(input.clone()) {
             let trait_item_fn = self.fold_trait_item_fn(trait_item_fn);
             quote::quote!(#trait_item_fn).into()
+        } else if let Ok(expr_closure) = syn::parse(input.clone()) {
+            let expr_closure = self.fold_expr_closure(expr_closure);
+            quote::quote!(#expr_closure).into()
+        } else if let Ok(expr_async) = syn::parse(input) {
+            let expr_async = self.fold_expr_async(expr_async);
+            quote::quote!(#expr_async).into()
         } else {
-            panic!("#[throws] attribute can only be applied to functions and methods")
+            panic!("#[throws] attribute can only be applied to functions, methods, closures or async blocks")
         }
     }
 }
@@ -99,11 +105,37 @@ impl Fold for Throws {
     }
 
     fn fold_expr_closure(&mut self, i: syn::ExprClosure) -> syn::ExprClosure {
-        i // TODO
+        if !self.outer_fn {
+            return i;
+        }
+
+        let output = match i.output {
+            syn::ReturnType::Default => syn::parse_quote!(-> _),
+            output => output,
+        };
+        let output = self.fold_return_type(output);
+
+        self.outer_fn = false;
+
+        let inner = self.fold_expr(*i.body);
+        let body = Box::new(make_fn_expr(&self.return_type, &inner));
+
+        syn::ExprClosure { output, body, ..i }
     }
 
     fn fold_expr_async(&mut self, i: syn::ExprAsync) -> syn::ExprAsync {
-        i // TODO
+        if !self.outer_fn {
+            return i;
+        }
+
+        // update self.return_type
+        let _ = self.fold_return_type(syn::parse_quote!(-> _));
+        self.outer_fn = false;
+
+        let inner = self.fold_block(i.block);
+        let block = make_fn_block(&self.return_type, &inner);
+
+        syn::ExprAsync { block, ..i }
     }
 
     fn fold_return_type(&mut self, i: syn::ReturnType) -> syn::ReturnType {
@@ -147,7 +179,7 @@ fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
     let mut block: syn::Block = syn::parse2(quote::quote! {{
         #[allow(clippy::diverging_sub_expression)]
         {
-            let __ret = { #inner };
+            let __ret = #inner;
 
             #[allow(unreachable_code)]
             <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
@@ -156,6 +188,19 @@ fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
     .unwrap();
     block.brace_token = inner.brace_token;
     block
+}
+
+fn make_fn_expr(ty: &syn::Type, inner: &syn::Expr) -> syn::Expr {
+    syn::parse2(quote::quote! {{
+        #[allow(clippy::diverging_sub_expression)]
+        {
+            let __ret = { #inner };
+
+            #[allow(unreachable_code)]
+            <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
+        }
+    }})
+    .unwrap()
 }
 
 fn ok(ty: &syn::Type, expr: &syn::Expr) -> syn::Expr {
