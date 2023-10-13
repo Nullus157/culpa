@@ -109,11 +109,6 @@ macro_rules! throw {
 
 #[doc(hidden)]
 pub mod __internal {
-    pub trait _Succeed {
-        type Ok;
-        fn from_ok(ok: Self::Ok) -> Self;
-    }
-
     pub trait _Throw {
         type Error;
         fn from_error(error: Self::Error) -> Self;
@@ -122,28 +117,10 @@ pub mod __internal {
     mod stable {
         use core::task::Poll;
 
-        impl<T, E> super::_Succeed for Result<T, E> {
-            type Ok = T;
-            fn from_ok(ok: T) -> Self {
-                Ok(ok)
-            }
-        }
-
         impl<T, E> super::_Throw for Result<T, E> {
             type Error = E;
             fn from_error(error: Self::Error) -> Self {
                 Err(error)
-            }
-        }
-
-        impl<T, E> super::_Succeed for Poll<Result<T, E>> {
-            type Ok = Poll<T>;
-
-            fn from_ok(ok: Self::Ok) -> Self {
-                match ok {
-                    Poll::Ready(ok) => Poll::Ready(Ok(ok)),
-                    Poll::Pending => Poll::Pending,
-                }
             }
         }
 
@@ -155,31 +132,11 @@ pub mod __internal {
             }
         }
 
-        impl<T, E> super::_Succeed for Poll<Option<Result<T, E>>> {
-            type Ok = Poll<Option<T>>;
-
-            fn from_ok(ok: Self::Ok) -> Self {
-                match ok {
-                    Poll::Ready(Some(ok)) => Poll::Ready(Some(Ok(ok))),
-                    Poll::Ready(None) => Poll::Ready(None),
-                    Poll::Pending => Poll::Pending,
-                }
-            }
-        }
-
         impl<T, E> super::_Throw for Poll<Option<Result<T, E>>> {
             type Error = E;
 
             fn from_error(error: Self::Error) -> Self {
                 Poll::Ready(Some(Err(error)))
-            }
-        }
-
-        impl<T> super::_Succeed for Option<T> {
-            type Ok = T;
-
-            fn from_ok(ok: Self::Ok) -> Self {
-                Some(ok)
             }
         }
     }
