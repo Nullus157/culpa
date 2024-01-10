@@ -117,7 +117,10 @@
 //! # Annotating Expressions
 //!
 //! Attributes on expressions are still unstable, so there is a separate non-attribute macro
-//! [`throws_expr!`] available to wrap closures or async blocks.
+//! [`throws_expr!`] available to wrap closures or async blocks. This does not have any way to pass
+//! an error type, so only supports usage with a contextual "default error type". If you must
+//! override it for a single closure, you can do so by putting it in a block with a separate `use`
+//! or type alias.
 //!
 //! ## Example
 //!
@@ -137,6 +140,11 @@
 //!
 //!     println!("Okay!");
 //! });
+//!
+//! let string_throwing_closure = {
+//!     type Error = &'static str;
+//!     throws_expr!(|| throw!("This is not for you."))
+//! };
 //! ```
 
 #[doc(inline)]
