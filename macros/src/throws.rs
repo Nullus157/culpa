@@ -11,13 +11,13 @@ use syn::fold::Fold;
 use crate::Args;
 
 pub struct Throws {
-    args: Args,
+    args: Option<Args>,
     outer_fn: bool,
     return_type: syn::Type,
 }
 
 impl Throws {
-    pub fn new(args: Args) -> Throws {
+    pub fn new(args: Option<Args>) -> Throws {
         Throws {
             args,
             outer_fn: true,
@@ -110,9 +110,13 @@ impl Fold for Throws {
         if !self.outer_fn {
             return i;
         }
-        let return_type = self.args.ret(i);
-        let syn::ReturnType::Type(_, ty) = &return_type else {
-            unreachable!()
+        let return_type = match &mut self.args {
+            Some(args) => args.ret(i),
+            None => i,
+        };
+        let ty = match &return_type {
+            syn::ReturnType::Type(_, ty) => (**ty).clone(),
+            syn::ReturnType::Default => syn::Type::Infer(syn::parse_quote!(_)),
         };
         struct ImplTraitToInfer;
         impl Fold for ImplTraitToInfer {
@@ -123,7 +127,7 @@ impl Fold for Throws {
                 }
             }
         }
-        self.return_type = ImplTraitToInfer.fold_type(ty.as_ref().clone());
+        self.return_type = ImplTraitToInfer.fold_type(ty);
         return_type
     }
 

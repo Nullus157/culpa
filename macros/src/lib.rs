@@ -11,5 +11,11 @@ use throws::Throws;
 #[proc_macro_attribute]
 pub fn throws(args: TokenStream, input: TokenStream) -> TokenStream {
     let args = syn::parse_macro_input!(args as Args);
-    Throws::new(args).fold(input)
+    Throws::new(Some(args)).fold(input)
+}
+
+#[proc_macro_attribute]
+pub fn try_fn(args: TokenStream, input: TokenStream) -> TokenStream {
+    assert!(args.to_string() == "", "try_fn does not take arguments");
+    Throws::new(None).fold(input)
 }
