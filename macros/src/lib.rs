@@ -15,7 +15,7 @@ pub fn throws(args: TokenStream, input: TokenStream) -> TokenStream {
 }
 
 #[proc_macro_attribute]
-pub fn try_(args: TokenStream, input: TokenStream) -> TokenStream {
-    assert!(args.to_string() == "", "try does not take arguments");
+pub fn try_fn(args: TokenStream, input: TokenStream) -> TokenStream {
+    assert!(args.to_string() == "", "try_fn does not take arguments");
     Throws::new(None).fold(input)
 }

@@ -98,7 +98,7 @@ pub use culpa_macros::throws;
 /// Annotates a function that implicitly wraps a try block.
 ///
 /// See the main crate docs for more details.
-pub use culpa_macros::try_;
+pub use culpa_macros::try_fn;
 
 /// Throw an error.
 ///
