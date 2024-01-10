@@ -116,18 +116,19 @@
 //!
 //! # Annotating Expressions
 //!
-//! Attributes on expressions are still unstable, so there is a separate non-attribute macro
-//! [`throws_expr!`] available to wrap closures or async blocks. This does not have any way to pass
-//! an error type, so only supports usage with a contextual "default error type". If you must
-//! override it for a single closure, you can do so by putting it in a block with a separate `use`
-//! or type alias.
+//! Attributes on expressions are still unstable, so there are separate non-attribute macro
+//! [`throws_expr!`] and [`try_expr!`] available to wrap closures or async blocks. `throws_expr!`
+//! does not have any way to pass an error type, so only supports usage with a contextual "default
+//! error type". If you must override it for a single closure, you can do so by putting it in a
+//! block with a separate `use` or type alias, or simply use `try_expr!` with a normal closure
+//! return type annotation.
 //!
 //! ## Example
 //!
 //! ```
 //! use std::io::{self, Read, Error};
 //!
-//! use culpa::{throw, throws_expr};
+//! use culpa::{throw, throws_expr, try_expr};
 //!
 //! let closure = throws_expr!(|| {
 //!     let mut file = std::fs::File::open("The_House_of_the_Spirits.txt")?;
@@ -145,6 +146,14 @@
 //!     type Error = &'static str;
 //!     throws_expr!(|| throw!("This is not for you."))
 //! };
+//!
+//! let string_throwing_closure = try_expr!(|| -> Result<_, &'static str> {
+//!     throw!("The air trembles. A breath of change passes…")
+//! });
+//!
+//! let maybe_random = try_expr!(|| -> Option<_> {
+//!     4
+//! });
 //! ```
 
 #[doc(inline)]
@@ -166,6 +175,14 @@ pub use culpa_macros::try_fn;
 ///
 /// See the main crate docs for more details.
 pub use culpa_macros::throws_expr;
+
+#[doc(inline)]
+/// Annotates an expression (closure or async block) that implicitly wraps a try block.
+///
+/// Workaround for attributes on expressions being unstable.
+///
+/// See the main crate docs for more details.
+pub use culpa_macros::try_expr;
 
 /// Throw an error.
 ///
