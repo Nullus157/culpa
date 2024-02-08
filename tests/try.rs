@@ -141,6 +141,7 @@ pub fn unreachable() -> Result<(), i32> {
     todo!()
 }
 
+#[allow(dead_code)]
 trait Example {
     #[try_fn]
     fn foo() -> Result<i32, Error>;

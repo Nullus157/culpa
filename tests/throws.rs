@@ -144,6 +144,7 @@ pub fn unreachable() {
     todo!()
 }
 
+#[allow(dead_code)]
 trait Example {
     #[throws]
     fn foo() -> i32;
