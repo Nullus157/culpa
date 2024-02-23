@@ -51,13 +51,19 @@ impl Args {
     }
 }
 
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            error: Some(default_error()),
+            wrapper: Some(result()),
+        }
+    }
+}
+
 impl Parse for Args {
     fn parse(input: ParseStream) -> Result<Args> {
         if input.is_empty() {
-            return Ok(Args {
-                error: Some(default_error()),
-                wrapper: Some(result()),
-            });
+            return Ok(Args::default());
         }
 
         let error = match input.peek(Token![as]) {

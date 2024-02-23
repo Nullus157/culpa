@@ -19,3 +19,13 @@ pub fn try_fn(args: TokenStream, input: TokenStream) -> TokenStream {
     assert!(args.to_string() == "", "try_fn does not take arguments");
     Throws::new(None).fold(input)
 }
+
+#[proc_macro]
+pub fn throws_expr(input: TokenStream) -> TokenStream {
+    Throws::new(Some(Args::default())).fold(input)
+}
+
+#[proc_macro]
+pub fn try_expr(input: TokenStream) -> TokenStream {
+    Throws::new(None).fold(input)
+}
