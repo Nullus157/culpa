@@ -150,7 +150,7 @@ fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
             let __ret = { #inner };
 
             #[allow(unreachable_code)]
-            <#ty as ::culpa::__internal::_Succeed>::from_ok(__ret)
+            ::core::iter::Iterator::try_fold::<_, _, #ty>(&mut ::core::iter::empty::<::core::convert::Infallible>(), __ret, |_, x| match x {})
         }
     }})
     .unwrap();
@@ -159,9 +159,9 @@ fn make_fn_block(ty: &syn::Type, inner: &syn::Block) -> syn::Block {
 }
 
 fn ok(ty: &syn::Type, expr: &syn::Expr) -> syn::Expr {
-    syn::parse2(quote::quote!(<#ty as ::culpa::__internal::_Succeed>::from_ok(#expr))).unwrap()
+    syn::parse2(quote::quote!(::core::iter::Iterator::try_fold::<_, _, #ty>(&mut ::core::iter::empty::<::core::convert::Infallible>(), #expr, |_, x| match x {}))).unwrap()
 }
 
 fn ok_unit(ty: &syn::Type) -> syn::Expr {
-    syn::parse2(quote::quote!(<#ty as ::culpa::__internal::_Succeed>::from_ok(()))).unwrap()
+    syn::parse2(quote::quote!(::core::iter::Iterator::try_fold::<_, _, #ty>(&mut ::core::iter::empty::<::core::convert::Infallible>(), (), |_, x| match x {}))).unwrap()
 }
